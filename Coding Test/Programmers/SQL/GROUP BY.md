@@ -1,0 +1,56 @@
+# GROUP BY
+
+### 고양이와 개는 몇 마리 있을까
+
+```mysql
+SELECT ANIMAL_TYPE, COUNT(ANIMAL_TYPE) AS COUNT
+FROM ANIMAL_INS
+GROUP BY ANIMAL_TYPE
+ORDER BY ANIMAL_TYPE
+```
+
+ 
+
+### 동명 동물 수 찾기
+
+```mysql
+SELECT NAME, Count(*) AS COUNT
+FROM ANIMAL_INS
+WHERE NOT NAME IS NULL
+GROUP BY NAME HAVING COUNT > 1
+ORDER BY NAME
+```
+
+ 
+
+### 입양 시각 구하기(1)
+
+```mysql
+SELECT HOUR(DATETIME) AS HOUR, COUNT(DATETIME) AS COUNT
+FROM ANIMAL_OUTS
+WHERE 9 <= HOUR(DATETIME) AND HOUR(DATETIME) < 20
+GROUP BY HOUR(DATETIME)
+ORDER BY HOUR(DATETIME)
+```
+
+ 
+
+### 입양 시각 구하기(2)
+
+```mysql
+SET @hour = -1; 
+SELECT (@hour := @hour + 1) AS HOUR, ( 
+    SELECT COUNT(DATETIME)      
+    FROM ANIMAL_OUTS 
+    WHERE HOUR(DATETIME) = @hour 
+) AS COUNT
+FROM ANIMAL_OUTS 
+WHERE @hour < 23
+```
+
+
+
+## 문제 풀이
+
+[프로그래머스: SQL - GROUP BY](https://dirmathfl.tistory.com/321)
+
